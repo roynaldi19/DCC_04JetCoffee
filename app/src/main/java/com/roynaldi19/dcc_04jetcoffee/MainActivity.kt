@@ -9,9 +9,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -24,9 +25,9 @@ import com.roynaldi19.dcc_04jetcoffee.model.dummyBestSellerMenu
 import com.roynaldi19.dcc_04jetcoffee.model.dummyCategory
 import com.roynaldi19.dcc_04jetcoffee.model.dummyMenu
 import com.roynaldi19.dcc_04jetcoffee.ui.component.CategoryItem
+import com.roynaldi19.dcc_04jetcoffee.ui.component.HomeSection
 import com.roynaldi19.dcc_04jetcoffee.ui.component.MenuItem
 import com.roynaldi19.dcc_04jetcoffee.ui.component.Search
-import com.roynaldi19.dcc_04jetcoffee.ui.component.SectionText
 import com.roynaldi19.dcc_04jetcoffee.ui.theme.DCC_04JetCoffeeTheme
 
 class MainActivity : ComponentActivity() {
@@ -43,16 +44,25 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun JetCoffeeApp() {
-    Column {
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Banner()
-        SectionText(stringResource(R.string.section_category))
-        CategoryRow()
-        SectionText(stringResource(R.string.section_favorite_menu))
-        MenuRow(dummyMenu)
-        SectionText(stringResource(R.string.section_best_seller_menu))
-        MenuRow(dummyBestSellerMenu)
+        HomeSection(
+            title = stringResource(R.string.section_category),
+            content = { CategoryRow() }
+        )
+
+        HomeSection(
+            title = stringResource(R.string.section_favorite_menu),
+            content = { MenuRow(dummyMenu) }
+        )
+
+        HomeSection(
+            title = stringResource(R.string.section_best_seller_menu),
+            content = { MenuRow(dummyBestSellerMenu) }
+        )
     }
 }
+
 
 @Composable
 fun Banner(
@@ -77,7 +87,7 @@ fun CategoryRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp),
 
-    )
+        )
     {
         items(dummyCategory, key = { it.textCategory }) { category ->
             CategoryItem(category)
@@ -96,7 +106,7 @@ fun MenuRow(
         contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = modifier
     ) {
-        items(listMenu, key = {it.title}) { menu ->
+        items(listMenu, key = { it.title }) { menu ->
             MenuItem(menu)
         }
     }
